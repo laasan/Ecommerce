@@ -6,14 +6,14 @@ import Rating from '../components/Rating'
 import { listProductDetails } from '../actions/productActions'
 
 function ProductScreen() {
-  let params = useParams()
+  const params = useParams()
   const dispatch = useDispatch()
+  const productDetails = useSelector(state => state.productDetails)
+  const { loading, error, product} = productDetails
 
   useEffect(()=>{
     dispatch(listProductDetails(params.id))
   }, [])
-
-  let product = {}
 
   return (
     <div>
