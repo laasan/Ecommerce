@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Row,Col, Image, ListGroup, Button, Card, Form } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
@@ -11,6 +11,7 @@ function ProductScreen() {
   const [qty, setQty] = useState(1)
 
   const params = useParams()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const productDetails = useSelector(state => state.productDetails)
   const { loading, error, product} = productDetails
@@ -18,6 +19,10 @@ function ProductScreen() {
   useEffect(()=>{
     dispatch(listProductDetails(params.id))
   }, [dispatch, params])
+
+  const addToCartHandler = () => {
+    navigate(`/cart/${params.id}?qty=${qty}`)
+  }
 
   return (
     <div>
@@ -97,7 +102,13 @@ function ProductScreen() {
                       )}
       
                       <ListGroup.Item>
-                        <Button className='btn-block' disabled={product.countInStock == 0} type='button'>Add to Cart</Button>
+                        <Button
+                          onClick={addToCartHandler}
+                          className='btn-block'
+                          disabled={product.countInStock == 0}
+                          type='button'>
+                            Add to Cart
+                        </Button>
                       </ListGroup.Item>
                     </ListGroup>
                   </Card>
