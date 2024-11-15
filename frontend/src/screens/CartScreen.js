@@ -29,6 +29,10 @@ const removeFromCartHandler = (id) => {
   console.log(id)
 }
 
+const checkoutHandler = () => {
+  navigate('/login?redirect=shipping')
+}
+
   return (
     <Row>
       <Col md={8}>
@@ -91,6 +95,17 @@ const removeFromCartHandler = (id) => {
             <ListGroup.Item>
               <h2>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items</h2>
               ${cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)}
+            </ListGroup.Item>
+
+            <ListGroup.Item>
+              <Button
+                type='button'
+                className='btn-block'
+                disabled={cartItems.length === 0}
+                onClick={checkoutHandler}
+              >
+                Proceed To Checkout
+              </Button>
             </ListGroup.Item>
           </ListGroup>
         </Card>
