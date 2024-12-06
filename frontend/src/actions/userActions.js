@@ -25,7 +25,7 @@ export const login = (email, password) => async (dispatch) => {
         )
 
         dispatch({
-            type: USER_LOGIN_REQUEST,
+            type: USER_LOGIN_SUCCESS,
             payload: data
         })
 
@@ -34,7 +34,7 @@ export const login = (email, password) => async (dispatch) => {
 
     } catch (error) {
         dispatch({
-            type: USER_LOGIN_SUCCESS,
+            type: USER_LOGIN_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
