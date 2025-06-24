@@ -13,7 +13,7 @@ function CartScreen() {
 
   const productId = params.id
   const qty = queryParams.get('qty')
-  
+
   const dispatch = useDispatch()
 
   const cart = useSelector(state => state.cart)
@@ -94,7 +94,7 @@ const checkoutHandler = () => {
         <Card>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}) items</h2>
+              <h2>Subtotal ({cartItems.reduce((acc, item) => acc + Number(item.qty), 0)}) items</h2>
               ${cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)}
             </ListGroup.Item>
 
