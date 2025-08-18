@@ -4,9 +4,17 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
+import { createOrder } from '../actions/orderActions'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 
 
 function PlaceOrderScreen() {
+  const orderCreate = useSelector(state => state.orderCreate)
+  const { order, error, success } = orderCreate
+
+  const params = useParams()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const cart = useSelector(state => state.cart)
 
   cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty)
@@ -14,8 +22,27 @@ function PlaceOrderScreen() {
   cart.taxPrice = Number((0.082) * cart.itemsPrice).toFixed(2)
   cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2)
 
+  if(!cart.paymentMethod) {
+    navigate('/payment')
+    dispatch({ type: ORDER_CREATE_RESET })
+  }
+
+  useEffect(() => {
+    if(success) {
+      navigate(`/order/${order._id}`)
+    }
+  }, [success, params])
+
   const placeOrder = () => {
-    console.log('Place Order')
+    dispatch(createOrder({
+      orderItems: cart.cartItems,
+      shippingAddress: cart.shippingAddress,
+      paymentMethod: cart.paymentMethod,
+      itemsPrice: cart.itemsPrice,
+      shippingPrice: cart.shippingPrice,
+      taxPrice: cart.taxPrice,
+      totalPrice: cart.totalPrice,
+    }))
   }
 
   return (
@@ -104,6 +131,10 @@ function PlaceOrderScreen() {
                   <Col>Total:</Col>
                   <Col>${cart.totalPrice}</Col>
                 </Row>
+              </ListGroup.Item>
+
+              <ListGroup.Item>
+                {error && <Message variant='danger'>{error}</Message>}
               </ListGroup.Item>
 
               <ListGroup.Item>
