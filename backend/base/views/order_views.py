@@ -9,7 +9,7 @@ from base.serializers import ProductSerializer, OrderSerializer
 
 from rest_framework import status
 
-@api_view('POST')
+@api_view(['POST'])
 @permission_classes(['IsAuthenticated'])
 def addOrderItems(request):
     user = request.user
